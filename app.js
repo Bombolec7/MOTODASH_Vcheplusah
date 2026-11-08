@@ -54,9 +54,9 @@ function renderHistory(){const root=$("historyList");if(!state.sessions.length){
 function requestSensors(){const orient=()=>{if(typeof DeviceOrientationEvent!=="undefined"){const ev=e=>{if(e.gamma==null)return;const angle = screen.orientation?.angle ?? window.orientation ?? 0;
 
 if (angle === 90 || angle === -270) {
-    state.lean = -e.beta;
-} else if (angle === 270 || angle === -90) {
     state.lean = e.beta;
+} else if (angle === 270 || angle === -90) {
+    state.lean = -e.beta;
 } else {
     state.lean = e.gamma;
 }; $("orientationStatus").textContent="ACTIF";updateLean()};window.addEventListener("deviceorientation",ev);$("sensorHint").textContent="Inclinaison active. Fixe solidement le téléphone avant tout essai."; }else $("orientationStatus").textContent="NON DISPONIBLE"};

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#08090c">
+  <meta name="description" content="MotoDash, tableau de bord moto et télémétrie.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <title>MotoDash Web V2.5</title>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">M</span><span>MOTO<span class="red">DASH</span></span><small>V2.5</small></div>
+    <div class="status"><span id="gpsDot" class="dot"></span><span id="gpsStatus">GPS EN ATTENTE</span></div>
+  </header>
+  <nav class="tabs" aria-label="Navigation">
+    <button class="tab active" data-screen="dashboard">Dashboard</button>
+    <button class="tab" data-screen="telemetry">Télémétrie</button>
+    <button class="tab" data-screen="history">Historique</button>
+  </nav>
+
+  <main>
+    <section id="dashboard" class="screen active">
+      <div class="cockpit">
+        <aside class="stat-column">
+          <div class="brand-mini">MOTO<span class="red">DASH</span></div>
+          <article class="stat-card"><span>VITESSE MAX</span><div><b id="maxSpeed">0</b><small>km/h</small></div></article>
+          <article class="stat-card"><span>ACCÉLÉRATION MAX</span><div><b id="maxAccel">0.00</b><small>G</small></div></article>
+          <article class="stat-card"><span>FREINAGE MAX</span><div><b id="maxBrake">0.00</b><small>G</small></div></article>
+        </aside>
+
+        <section class="center-console">
+          <h1>ANGLE D'INCLINAISON</h1>
+          <div class="lean-readings">
+            <div class="lean-record"><span>MAX GAUCHE</span><b id="maxLeft">0.0°</b></div>
+            <div class="lean-current"><strong><span id="leanValue">0</span>°</strong><small>ACTUEL</small></div>
+            <div class="lean-record"><span>MAX DROITE</span><b id="maxRight">0.0°</b></div>
+          </div>
+          <div class="gauge-wrap">
+            <svg class="gauge" viewBox="0 0 760 100" role="img" aria-label="Jauge horizontale d'inclinaison">
+              <line x1="30" y1="42" x2="730" y2="42" class="gauge-track"/>
+              <line id="gaugeActive" x1="380" y1="42" x2="380" y2="42" class="gauge-active"/>
+              <g id="ticks"></g>
+              <line id="needle" x1="380" y1="4" x2="380" y2="88" class="needle"/>
+            </svg>
+          </div>
+          <div class="controls">
+            <div class="session-controls">
+              <button id="startBtn" class="action">START</button>
+              <button id="pauseBtn" class="action" disabled>PAUSE</button>
+              <button id="stopBtn" class="action" disabled>STOP</button>
+            </div>
+            <div class="calibration-controls">
+              <button id="resetLeanBtn">RESET MAX</button>
+              <button id="calibrateBtn">CALIBRER LE ZÉRO</button>
+            </div>
+          </div>
+          <div class="sensor-readout"><span id="sessionState">EN ATTENTE</span><span>•</span><span id="sensorHint">Autorise les capteurs de mouvement.</span></div>
+          <div class="axes"><b>ACCÉLÉROMÈTRE</b><span>X : <strong id="accelLong">0.00</strong> G</span><span>Y : <strong id="accelLat">0.00</strong> G</span><span>Z : <strong id="accelVert">0.00</strong> G</span></div>
+        </section>
+
+        <aside class="stat-column">
+          <div class="brand-mini">MOTO<span class="red">DASH</span></div>
+          <article class="stat-card"><span>DISTANCE</span><div><b id="distance">0.0</b><small>km</small></div></article>
+          <article class="stat-card"><span>VITESSE ACTUELLE</span><div><b id="speed">0</b><small>km/h</small></div></article>
+          <article class="stat-card"><span>TEMPS SESSION</span><div><b id="duration">00:00</b></div></article>
+        </aside>
+      </div>
+    </section>
+
+    <section id="telemetry" class="screen">
+      <div class="section-title"><span>MESURES EN DIRECT</span><small>CAPTEURS DU TÉLÉPHONE</small></div>
+      <div class="telemetry-grid">
+        <article class="panel metric"><span>ACCÉLÉRATION LONGITUDINALE</span><strong><b id="teleLong">0.00</b><small>G</small></strong></article>
+        <article class="panel metric"><span>ACCÉLÉRATION LATÉRALE</span><strong><b id="teleLat">0.00</b><small>G</small></strong></article>
+        <article class="panel metric"><span>ACCÉLÉRATION VERTICALE</span><strong><b id="teleVert">0.00</b><small>G</small></strong></article>
+        <article class="panel metric"><span>MAX FREINAGE</span><strong><b id="teleBrake">0.00</b><small>G</small></strong></article>
+        <article class="panel metric"><span>MAX ACCÉLÉRATION</span><strong><b id="teleAccel">0.00</b><small>G</small></strong></article>
+        <article class="panel metric"><span>VITESSE GPS</span><strong><b id="teleSpeed">0</b><small>km/h</small></strong></article>
+      </div>
+      <article class="panel sensor-panel">
+        <div class="panel-head">ÉTAT DES CAPTEURS</div>
+        <div class="sensor-row"><span>Orientation</span><b id="orientationStatus">EN ATTENTE</b></div>
+        <div class="sensor-row"><span>Accéléromètre</span><b id="motionStatus">EN ATTENTE</b></div>
+        <div class="sensor-row"><span>Géolocalisation</span><b id="geoStatus">EN ATTENTE</b></div>
+        <div class="sensor-row"><span>Position</span><b id="coords">En attente</b></div>
+        <p class="hint">Les mesures web dépendent des capteurs et des permissions du navigateur. Elles ne remplacent pas un instrument homologué.</p>
+      </article>
+    </section>
+
+    <section id="history" class="screen">
+      <div class="section-title"><span>HISTORIQUE DES SESSIONS</span><button id="clearHistory" class="text-button">Tout supprimer</button></div>
+      <div id="historyList" class="history-list"><div class="empty panel">Aucune session enregistrée.</div></div>
+    </section>
+  </main>
+  <footer>MOTODASH <span>•</span> PROTOTYPE TÉLÉMÉTRIE</footer>
+  <script src="app.js"></script>
+</body>
+</html>
